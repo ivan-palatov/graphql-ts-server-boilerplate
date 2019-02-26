@@ -5,6 +5,7 @@
    "license": "MIT",
    "devDependencies": {
       "@types/node": "^11.9.5",
+      "gql2ts": "^1.10.1",
       "nodemon": "^1.18.10",
       "ts-node": "8.0.2",
       "tslint": "^5.13.0",
@@ -12,12 +13,14 @@
       "typescript": "3.3.3333"
    },
    "dependencies": {
+      "graphql-import": "^0.7.1",
       "graphql-yoga": "^1.17.4",
       "pg": "^7.3.0",
       "reflect-metadata": "^0.1.10",
       "typeorm": "0.2.14"
    },
    "scripts": {
-      "start": "nodemon --exec ts-node src/index.ts"
+      "start": "nodemon --exec ts-node src/index.ts",
+      "gen:schema": "yarn gql2ts src/schema.graphql -o src/types/schema.d.ts"
    }
 }
