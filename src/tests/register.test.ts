@@ -1,10 +1,18 @@
 import { request } from 'graphql-request';
 
 import { User } from '../entity/User';
-import { createTypeOrmConnection } from '../utils/createConnection';
+import { startServer } from '../startServer';
+
+let getHost = () => '';
 
 beforeAll(async () => {
-  await createTypeOrmConnection();
+  const app = await startServer();
+  const address = app.address();
+  let port: number;
+  if (address && typeof address !== 'string') {
+    port = address.port;
+  }
+  getHost = () => `http://127.0.0.1:${port}`;
 });
 
 const email = 'tester@test.com';
@@ -19,7 +27,7 @@ mutation {
 describe('Creates new user', async () => {
   it('should return true', async () => {
     expect.assertions(1);
-    const response = await request('http://localhost:4000', mutation);
+    const response = await request(getHost(), mutation);
     expect(response).toEqual({ register: true });
   });
   it('should find a specified user with hashed password', async () => {

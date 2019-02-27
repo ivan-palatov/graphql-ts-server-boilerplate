@@ -29,9 +29,9 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon --exec ts-node --files src/index.ts",
-    "test-server": "cross-env NODE_ENV=test nodemon --exec ts-node --files src/index.ts",
     "gen:schema": "yarn gql2ts src/schema.graphql -o src/types/schema.d.ts",
-    "test": "concurrently \"yarn test-server\" \"yarn jest --detectOpenHandles --watch\""
+    "test": "yarn jest --detectOpenHandles",
+    "test-watch": "yarn jest --detectOpenHandles --watch"
   },
   "jest": {
     "transform": {
