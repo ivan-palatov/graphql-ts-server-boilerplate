@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { IResolverMap } from '../../types/graphql-utils';
 import { User } from '../../entity/User';
 import { formatYupError } from '../../utils/formatYupError';
+import { createConfirmEmailLink } from '../../utils/createConfirmEmailLink';
 
 const schema = yup.object().shape({
   email: yup
@@ -14,15 +15,15 @@ const schema = yup.object().shape({
   password: yup
     .string()
     .min(6)
-    .max(75)
+    .max(75),
 });
 
 export const resolvers: IResolverMap = {
   Mutation: {
-    register: async (_, args: GQL.IRegisterOnMutationArguments) => {
+    register: async (_, args: GQL.IRegisterOnMutationArguments, { redis, url }) => {
       // Validation
       try {
-        await schema.validate(args, { abortEarly: false })
+        await schema.validate(args, { abortEarly: false });
       } catch (error) {
         return formatYupError(error);
       }
@@ -39,6 +40,9 @@ export const resolvers: IResolverMap = {
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = User.create({ email, password: hashedPassword });
       await user.save();
+      // Confirmation email
+      const link = await createConfirmEmailLink(url, user.id, redis);
+      console.log(link);
       return null;
     },
   },
