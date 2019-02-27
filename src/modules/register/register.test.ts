@@ -3,7 +3,6 @@ import { request } from 'graphql-request';
 import { startServer } from '../../startServer';
 import { User } from '../../entity/User';
 
-
 let getHost = () => '';
 
 beforeAll(async () => {
@@ -21,15 +20,24 @@ const password = 'test123';
 
 const mutation = `
 mutation {
-  register(email: "${email}", password: "${password}")
+  register(email: "${email}", password: "${password}") {
+    path
+    message
+  }
 }
 `;
 
-describe('Creates new user', async () => {
-  it('should return true', async () => {
+describe('Register user', async () => {
+  it('should return null and create a user', async () => {
     expect.assertions(1);
     const response = await request(getHost(), mutation);
-    expect(response).toEqual({ register: true });
+    expect(response).toEqual({ register: null });
+  });
+  it('should return `already taken` error', async () => {
+    expect.assertions(2);
+    const response: any = await request(getHost(), mutation);
+    expect(response.register).toHaveLength(1);
+    expect(response.register[0].path).toBe('email');
   });
   it('should find a specified user with hashed password', async () => {
     expect.assertions(2);
