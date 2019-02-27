@@ -15,10 +15,7 @@ beforeAll(async () => {
   getHost = () => `http://127.0.0.1:${port}`;
 });
 
-const email = 'tester@test.com';
-const password = 'test123';
-
-const mutation = `
+const mutation = (email: string, password: string) => `
 mutation {
   register(email: "${email}", password: "${password}") {
     path
@@ -28,21 +25,28 @@ mutation {
 `;
 
 describe('Register user', async () => {
+  it('should return array of errors', async () => {
+    expect.assertions(3);
+    const response: any = await request(getHost(), mutation('test.com', '123'));
+    expect(response.register).toHaveLength(2);
+    expect(response.register[0].path).toBe('email');
+    expect(response.register[1].path).toBe('password');
+  });
   it('should return null and create a user', async () => {
     expect.assertions(1);
-    const response = await request(getHost(), mutation);
+    const response = await request(getHost(), mutation('test@test.com', '123test'));
     expect(response).toEqual({ register: null });
   });
   it('should return `already taken` error', async () => {
     expect.assertions(2);
-    const response: any = await request(getHost(), mutation);
+    const response: any = await request(getHost(), mutation('test@test.com', '123test'));
     expect(response.register).toHaveLength(1);
     expect(response.register[0].path).toBe('email');
   });
   it('should find a specified user with hashed password', async () => {
     expect.assertions(2);
-    const user = await User.find({ where: { email } });
+    const user = await User.find({ where: { email: 'test@test.com' } });
     expect(user).toHaveLength(1);
-    expect(user[0].password).not.toBe(password);
+    expect(user[0].password).not.toBe('123test');
   });
 });

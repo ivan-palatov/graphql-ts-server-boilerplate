@@ -1,19 +1,41 @@
 import * as bcrypt from 'bcryptjs';
+import * as yup from 'yup';
 
 import { IResolverMap } from '../../types/graphql-utils';
 import { User } from '../../entity/User';
+import { formatYupError } from '../../utils/formatYupError';
+
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email()
+    .min(4)
+    .max(255),
+  password: yup
+    .string()
+    .min(6)
+    .max(75)
+});
 
 export const resolvers: IResolverMap = {
   Mutation: {
-    register: async (_, { email, password }: GQL.IRegisterOnMutationArguments) => {
+    register: async (_, args: GQL.IRegisterOnMutationArguments) => {
+      // Validation
+      try {
+        await schema.validate(args, { abortEarly: false })
+      } catch (error) {
+        return formatYupError(error);
+      }
+      const { email, password } = args;
       if (await User.findOne({ select: ['id'], where: { email } })) {
         return [
           {
             path: 'email',
-            message: 'already taken',
+            message: 'email already taken',
           },
         ];
       }
+      // Saving user
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = User.create({ email, password: hashedPassword });
       await user.save();
