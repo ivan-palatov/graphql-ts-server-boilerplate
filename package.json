@@ -20,8 +20,10 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "graphql": "^14.1.1",
     "graphql-import": "^0.7.1",
     "graphql-request": "^1.8.2",
+    "graphql-tools": "^4.0.4",
     "graphql-yoga": "^1.17.4",
     "pg": "^7.3.0",
     "reflect-metadata": "^0.1.10",
@@ -30,8 +32,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon --exec ts-node --files src/index.ts",
     "gen:schema": "yarn gql2ts src/schema.graphql -o src/types/schema.d.ts",
-    "test": "yarn jest --detectOpenHandles",
-    "test-watch": "yarn jest --detectOpenHandles --watch"
+    "test": "cross-env NODE_ENV=test yarn jest --detectOpenHandles",
+    "test-watch": "cross-env NODE_ENV=test yarn jest --detectOpenHandles --watch"
   },
   "jest": {
     "transform": {
