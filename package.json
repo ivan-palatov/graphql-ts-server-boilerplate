@@ -42,6 +42,7 @@
     "test-watch": "cross-env NODE_ENV=test yarn jest --detectOpenHandles --forceExit --watch"
   },
   "jest": {
+    "globalSetup": "./src/testsSetup/setup.ts",
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
