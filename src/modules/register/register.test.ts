@@ -20,9 +20,9 @@ mutation {
 // Needed to have direct DB access
 beforeAll(async () => {
   await createTypeOrmConnection();
-})
+});
 
-describe('Register user', async () => {
+describe('Register user', () => {
   it('should return array of errors', async () => {
     expect.assertions(3);
     const response: any = await request(TEST_HOST!, mutation('test.com', '123'));
