@@ -1,4 +1,5 @@
 import { request } from 'graphql-request';
+import { Connection } from 'typeorm';
 
 import { User } from '../../entity/User';
 import { createTypeOrmConnection } from '../../utils/createConnection';
@@ -17,9 +18,13 @@ mutation {
 }
 `;
 
-// Needed to have direct DB access
+let connection: Connection;
 beforeAll(async () => {
-  await createTypeOrmConnection();
+  connection = await createTypeOrmConnection();
+});
+
+afterAll(async () => {
+  await connection.close();
 });
 
 describe('Register user', () => {

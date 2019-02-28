@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { Connection } from 'typeorm';
 
 import { User } from "../entity/User";
 import { createTypeOrmConnection } from "../utils/createConnection";
@@ -8,12 +9,17 @@ import { redis } from "../redis";
 let ID = 1;
 let url = '';
 
+let connection: Connection;
 beforeAll(async () => {
-  await createTypeOrmConnection();
+  connection = await createTypeOrmConnection();
   const user = await User.create({ email: 'goodmail@mail.com', password: '123asffas' }).save();
   url = await createConfirmEmailLink(process.env.TEST_HOST!, user.id, redis);
   ID = user.id;
   await fetch(url);
+});
+
+afterAll(async () => {
+  await connection.close();
 });
 
 describe('confirmEmail route', () => {

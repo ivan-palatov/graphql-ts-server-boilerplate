@@ -1,14 +1,27 @@
 import request from 'graphql-request';
-// import { User } from '../../entity/User';
-// import { createTypeOrmConnection } from '../../utils/createConnection';
+import { Connection } from 'typeorm';
+
+import { createTypeOrmConnection } from '../../utils/createConnection';
+import { User } from '../../entity/User';
 
 const { TEST_HOST } = process.env;
+
+let connection: Connection;
+beforeAll(async () => {
+  connection = await createTypeOrmConnection();
+  await request(TEST_HOST!, registerMutation());
+});
+
+afterAll(async () => {
+  await connection.close();
+});
+
 const email = 'test@test.com';
 const password = '123testPass';
 
 const registerMutation = (e: string = email, p: string = password) => `
 mutation {
-  login(email: "${e}", password: "${p}") {
+  register(email: "${e}", password: "${p}") {
     path
     message
   }
@@ -23,11 +36,6 @@ mutation {
   }
 }
 `;
-
-beforeAll(async () => {
-  // await createTypeOrmConnection();
-  await request(TEST_HOST!, registerMutation());
-});
 
 describe('Login resolver', () => {
   it('should return error if email not found', async () => {
@@ -51,10 +59,10 @@ describe('Login resolver', () => {
       login: [{ path: 'email', message: 'confirm your email address first' }],
     });
   });
-  // it('should return null if everything worked fine', async () => {
-  //   expect.assertions(1);
-  //   await User.update({ email }, { confirmed: true });
-  //   const res: any = await request(TEST_HOST!, loginMutation());
-  //   expect(res.login).toBeNull();
-  // });
+  it('should return null if everything worked fine', async () => {
+    expect.assertions(1);
+    await User.update({ email }, { confirmed: true });
+    const res: any = await request(TEST_HOST!, loginMutation());
+    expect(res.login).toBeNull();
+  });
 });

@@ -5,7 +5,7 @@ import { User } from '../../entity/User';
 
 export const resolvers: IResolverMap = {
   Mutation: {
-    login: async (_, { email, password }: GQL.ILoginOnMutationArguments) => {
+    login: async (_, { email, password }: GQL.ILoginOnMutationArguments, { req }) => {
       try {
         const user = await User.findOne({ where: { email } });
         if (!user) {
@@ -32,6 +32,8 @@ export const resolvers: IResolverMap = {
             },
           ];
         }
+        // save cookie
+        req.session!.userId = user.id;
         return null;
       } catch {
         return [

@@ -1,4 +1,3 @@
-import * as bcrypt from 'bcryptjs';
 import * as yup from 'yup';
 
 import { IResolverMap } from '../../types/graphql-utils';
@@ -38,8 +37,7 @@ export const resolvers: IResolverMap = {
         ];
       }
       // Saving user
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const user = User.create({ email, password: hashedPassword });
+      const user = User.create({ email, password });
       await user.save();
       // Dont want to be sending emails while testing
       if (process.env.NODE_ENV === 'test') {

@@ -1,4 +1,6 @@
 import { GraphQLServer } from 'graphql-yoga';
+import * as session from 'express-session';
+import * as connectRedis from 'connect-redis';
 
 import { redis } from './redis';
 import { confirmEmail } from './routes/confirmEmail';
@@ -12,14 +14,42 @@ export const startServer = async () => {
   // Creating yoga server
   const server = new GraphQLServer({
     schema: generateSchema(),
-    context: ({ request }) => ({ redis, url: `${request.protocol}://${request.get('host')}` }),
+    context: ({ request }) => ({
+      redis,
+      url: `${request.protocol}://${request.get('host')}`,
+      req: request,
+    }),
   });
+
+  const RedisStore = connectRedis(session);
+
+  // Apply middleware
+  server.express.use(
+    session({
+      store: new RedisStore({}),
+      name: 'qid',
+      secret: process.env.SESSION_SECRET!,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 1000 * 3600 * 24 * 30, // 30 days
+      },
+    })
+  );
+
+  // CORS settings, array of multiple origins might be passed
+  const cors = {
+    credentials: true,
+    origin: process.env.NODE_ENV === 'test' ? '*' : process.env.FRONTEND_HOST!,
+  };
 
   // Express routes here
   server.express.get('/confirm/:id', confirmEmail);
 
   // Starting the server
-  const app = await server.start({ port: process.env.NODE_ENV === 'test' ? 0 : 4000 });
+  const app = await server.start({ cors, port: process.env.NODE_ENV === 'test' ? 0 : 4000 });
   console.clear();
   console.log(
     `Server is running at http://localhost:${process.env.NODE_ENV === 'test' ? 0 : 4000}`
