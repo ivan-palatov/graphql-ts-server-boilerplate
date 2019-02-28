@@ -5,6 +5,7 @@ import { IResolverMap } from '../../types/graphql-utils';
 import { User } from '../../entity/User';
 import { formatYupError } from '../../utils/formatYupError';
 import { createConfirmEmailLink } from '../../utils/createConfirmEmailLink';
+import { sendConfirmEmail } from '../../utils/sendConfirmEmail';
 
 const schema = yup.object().shape({
   email: yup
@@ -40,9 +41,20 @@ export const resolvers: IResolverMap = {
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = User.create({ email, password: hashedPassword });
       await user.save();
-      // Confirmation email
-      const link = await createConfirmEmailLink(url, user.id, redis);
-      console.log(link);
+      // Dont want to be sending emails while testing
+      if (process.env.NODE_ENV === 'test') {
+        return null;
+      }
+      // Sending confirmation email
+      const res = await sendConfirmEmail(email, await createConfirmEmailLink(url, user.id, redis));
+      if (!res) {
+        return [
+          {
+            path: 'email',
+            message: 'email address is unavailable, please try again later',
+          },
+        ];
+      }
       return null;
     },
   },
