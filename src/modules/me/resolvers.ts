@@ -1,7 +1,7 @@
 import { IResolverMap } from '../../types/graphql-utils';
 import { User } from '../../entity/User';
 import { createMiddleware } from '../../utils/createMiddleware';
-import { isAuthenticated } from '../../utils/middleware';
+import { isAuthenticated } from '../../utils/isAuthMiddleware';
 
 export const resolvers: IResolverMap = {
   Query: {

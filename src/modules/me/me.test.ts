@@ -40,8 +40,10 @@ const meQuery = `
 `;
 
 describe('Me query', () => {
-  it('should return error if user not logged in', async () => {
-    //
+  it('should return null if user not logged in', async () => {
+    expect.assertions(1);
+    const res = await axios.post(TEST_HOST!, { query: meQuery }, { withCredentials: false });
+    expect(res.data.data.me).toBeNull();
   });
   it('should show current user', async () => {
     expect.assertions(1);

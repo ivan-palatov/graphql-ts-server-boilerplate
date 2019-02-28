@@ -23,7 +23,7 @@ export const startServer = async () => {
       req: request,
     }),
   });
-
+  // Session store using redis
   const RedisStore = connectRedis(session);
 
   // Apply middleware
