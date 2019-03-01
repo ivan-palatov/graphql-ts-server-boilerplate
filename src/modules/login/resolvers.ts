@@ -33,6 +33,15 @@ export const resolvers: IResolverMap = {
             },
           ];
         }
+        if (user.forgotPasswordLocked) {
+          return [
+            {
+              path: 'email',
+              message:
+                "your account is locked, because forgot password was performed, but password wasn't changed",
+            },
+          ];
+        }
         // save cookie
         req.session!.userId = user.id;
         if (req.sessionID) {

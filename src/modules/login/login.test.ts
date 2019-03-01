@@ -49,4 +49,17 @@ describe('Login resolver', () => {
     const res = await client.login(email, password);
     expect(res.data.login).toBeNull();
   });
+  it('should return error if account is locked via forgot password', async () => {
+    expect.assertions(1);
+    await User.update({ email }, { forgotPasswordLocked: true });
+    await client.logout();
+    const res = await client.login(email, password);
+    expect(res.data.login).toEqual([
+      {
+        path: 'email',
+        message:
+          "your account is locked, because forgot password was performed, but password wasn't changed",
+      },
+    ]);
+  });
 });

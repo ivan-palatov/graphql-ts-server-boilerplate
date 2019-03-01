@@ -34,9 +34,25 @@ email: string;
 
 interface IMutation {
 __typename: "Mutation";
+sendForgotPasswordEmail: Array<IError> | null;
+forgotPasswordChange: Array<IError> | null;
+forgotPasswordLockAccount: boolean;
 login: Array<IError> | null;
 logout: boolean | null;
 register: Array<IError> | null;
+}
+
+interface ISendForgotPasswordEmailOnMutationArguments {
+email: string;
+}
+
+interface IForgotPasswordChangeOnMutationArguments {
+password: string;
+key: string;
+}
+
+interface IForgotPasswordLockAccountOnMutationArguments {
+key: string;
 }
 
 interface ILoginOnMutationArguments {
