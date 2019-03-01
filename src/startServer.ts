@@ -9,6 +9,7 @@ import { redis } from './redis';
 import { confirmEmail } from './routes/confirmEmail';
 import { createTypeOrmConnection } from './utils/createConnection';
 import { generateSchema } from './utils/generateSchema';
+import { REDIS_SESSION_PREFIX } from './utils/constants';
 
 export const startServer = async () => {
   // Connecting to DB depending on NODE_ENV
@@ -29,7 +30,10 @@ export const startServer = async () => {
   // Apply middleware
   server.express.use(
     session({
-      store: new RedisStore({}),
+      store: new RedisStore({
+        client: redis as any,
+        prefix: REDIS_SESSION_PREFIX,
+      }),
       name: 'qid',
       secret: process.env.SESSION_SECRET!,
       resave: false,

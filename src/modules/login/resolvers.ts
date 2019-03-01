@@ -2,10 +2,11 @@ import * as bcrypt from 'bcryptjs';
 
 import { IResolverMap } from '../../types/graphql-utils';
 import { User } from '../../entity/User';
+import { USER_SESSION_ID_PREFIX } from '../../utils/constants';
 
 export const resolvers: IResolverMap = {
   Mutation: {
-    login: async (_, { email, password }: GQL.ILoginOnMutationArguments, { req }) => {
+    login: async (_, { email, password }: GQL.ILoginOnMutationArguments, { req, redis }) => {
       try {
         const user = await User.findOne({ where: { email } });
         if (!user) {
@@ -34,6 +35,9 @@ export const resolvers: IResolverMap = {
         }
         // save cookie
         req.session!.userId = user.id;
+        if (req.sessionID) {
+          await redis.lpush(`${USER_SESSION_ID_PREFIX}${user.id}`, req.sessionID);
+        }
         return null;
       } catch {
         return [
