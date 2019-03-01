@@ -1,27 +1,21 @@
 import { Redis } from 'ioredis';
 import { Request } from 'express';
+import { GraphQLResolveInfo } from 'graphql';
 
-export type Resolver = (
-  parent: any,
-  args: any,
-  context: {
-    redis: Redis;
-    url: string;
-    req: Request;
-  },
-  info: any
-) => any;
+interface IContext {
+  redis: Redis;
+  url: string;
+  req: Request;
+}
+
+export type Resolver = (parent: any, args: any, context: IContext, info: GraphQLResolveInfo) => any;
 
 export type Middleware = (
   resolver: Resolver,
   parent: any,
   args: any,
-  context: {
-    redis: Redis;
-    url: string;
-    req: Request;
-  },
-  info: any
+  context: IContext,
+  info: GraphQLResolveInfo
 ) => any;
 
 export interface IResolverMap {
