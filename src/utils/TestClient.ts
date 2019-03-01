@@ -85,4 +85,16 @@ export class TestClient {
       },
     });
   }
+
+  async forgotPasswordLockAccount(key: string) {
+    return rp.post(this.url, {
+      ...this.options,
+      body: {
+        query: `mutation {
+          forgotPasswordLockAccount(key: "${key}")
+        }
+        `,
+      },
+    });
+  }
 }

@@ -16,8 +16,8 @@ let connection: Connection;
 let userId: number;
 beforeAll(async () => {
   connection = await createTypeOrmConnection();
-  const user = await User.create({ email, password, confirmed: true }).save();
-  userId = user.id;
+  const user1 = await User.create({ email, password, confirmed: true }).save();
+  userId = user1.id;
 });
 
 afterAll(async () => {
@@ -51,4 +51,14 @@ describe('Forgot password', () => {
     const res = await client.forgotPasswordChange('123', key);
     expect(res.data.forgotPasswordChange[0].path).toBe('password');
   });
+  it('should lock account', async () => {
+    expect.assertions(1);
+    const client = new TestClient(TEST_HOST!);
+    const url = await createForgotPasswordLink('', userId, redis);
+    const parts = url.split('/');
+    const key = parts[parts.length - 1];
+    await client.forgotPasswordLockAccount(key);
+    const user = await User.findOne(userId);
+    expect(user!.forgotPasswordLocked).toBeTruthy();
+  })
 });
