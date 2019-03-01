@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { Connection } from 'typeorm';
 import { createTypeOrmConnection } from '../../utils/createConnection';
 import { User } from '../../entity/User';
+import { TestClient } from '../../utils/TestClient';
 
 const { TEST_HOST } = process.env;
 
@@ -21,35 +21,18 @@ afterAll(async () => {
   await connection.close();
 });
 
-const loginMutation = (e: string = email, p: string = password) => `
-mutation {
-  login(email: "${e}", password: "${p}") {
-    path
-    message
-  }
-}
-`;
-
-const meQuery = `
-{
-  me {
-    id
-    email
-  }
-}
-`;
-
 describe('Me query', () => {
+  const client = new TestClient(TEST_HOST!);
   it('should return null if user not logged in', async () => {
     expect.assertions(1);
-    const res = await axios.post(TEST_HOST!, { query: meQuery }, { withCredentials: false });
-    expect(res.data.data.me).toBeNull();
+    const res = await client.me();
+    expect(res.data.me).toBeNull();
   });
   it('should show current user', async () => {
     expect.assertions(1);
-    await axios.post(TEST_HOST!, { query: loginMutation() }, { withCredentials: true });
-    const res = await axios.post(TEST_HOST!, { query: meQuery }, { withCredentials: true });
-    expect(res.data.data).toEqual({
+    await client.login(email, password);
+    const res = await client.me();
+    expect(res.data).toEqual({
       me: {
         id: `${userId}`,
         email,

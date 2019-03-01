@@ -1,22 +1,13 @@
-import { request } from 'graphql-request';
 import { Connection } from 'typeorm';
 
 import { User } from '../../entity/User';
 import { createTypeOrmConnection } from '../../utils/createConnection';
+import { TestClient } from '../../utils/TestClient';
 
 const { TEST_HOST } = process.env;
 
 const email = 'test@test.com';
 const password = '123testPass';
-
-const mutation = (e: string = email, p: string = password) => `
-mutation {
-  register(email: "${e}", password: "${p}") {
-    path
-    message
-  }
-}
-`;
 
 let connection: Connection;
 beforeAll(async () => {
@@ -28,23 +19,24 @@ afterAll(async () => {
 });
 
 describe('Register user', () => {
+  const client = new TestClient(TEST_HOST!);
   it('should return array of errors', async () => {
     expect.assertions(3);
-    const response: any = await request(TEST_HOST!, mutation('test.com', '123'));
-    expect(response.register).toHaveLength(2);
-    expect(response.register[0].path).toBe('email');
-    expect(response.register[1].path).toBe('password');
+    const response = await client.register('test.com', '123');
+    expect(response.data.register).toHaveLength(2);
+    expect(response.data.register[0].path).toBe('email');
+    expect(response.data.register[1].path).toBe('password');
   });
   it('should return null and create a user', async () => {
     expect.assertions(1);
-    const response = await request(TEST_HOST!, mutation());
-    expect(response).toEqual({ register: null });
+    const response = await client.register(email, password);
+    expect(response.data).toEqual({ register: null });
   });
   it('should return `already taken` error', async () => {
     expect.assertions(2);
-    const response: any = await request(TEST_HOST!, mutation());
-    expect(response.register).toHaveLength(1);
-    expect(response.register[0].path).toBe('email');
+    const response = await client.register(email, password);
+    expect(response.data.register).toHaveLength(1);
+    expect(response.data.register[0].path).toBe('email');
   });
   it('should find a specified user with hashed password', async () => {
     expect.assertions(2);
