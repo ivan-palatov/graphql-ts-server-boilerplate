@@ -1,18 +1,20 @@
 import { Connection } from 'typeorm';
-import { createTypeOrmConnection } from '../../utils/createConnection';
-import { User } from '../../entity/User';
-import { TestClient } from '../../utils/TestClient';
+import * as faker from 'faker';
+
+import { createTestConnection } from '../../../testUtils/createTestConnection';
+import { User } from '../../../entity/User';
+import { TestClient } from '../../../testUtils/TestClient';
 
 const { TEST_HOST } = process.env;
 
-const email = 'test@test.com';
-const password = '123testPass';
+const email = faker.internet.email();
+const password = faker.internet.password();
 
 let userId: number;
 
 let connection: Connection;
 beforeAll(async () => {
-  connection = await createTypeOrmConnection();
+  connection = await createTestConnection();
   const user = await User.create({ email, password, confirmed: true }).save();
   userId = user.id;
 });

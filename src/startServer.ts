@@ -12,10 +12,15 @@ import { confirmEmail } from './routes/confirmEmail';
 import { createTypeOrmConnection } from './utils/createConnection';
 import { generateSchema } from './utils/generateSchema';
 import { REDIS_SESSION_PREFIX } from './utils/constants';
+import { createTestConnection } from './testUtils/createTestConnection';
 
 export const startServer = async () => {
-  // Connecting to DB depending on NODE_ENV
-  await createTypeOrmConnection();
+  if (process.env.NODE_ENV === 'test') {
+    await createTestConnection(true);
+    await redis.flushall();
+  } else {
+    await createTypeOrmConnection();
+  }
 
   // Creating yoga server
   const server = new GraphQLServer({
@@ -35,7 +40,7 @@ export const startServer = async () => {
       client: redis,
     }),
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 150, // limit each IP to 100 requests per windowMs
+    max: 150, // limit each IP to 150 requests per windowMs
   });
   server.express.use(limiter);
 

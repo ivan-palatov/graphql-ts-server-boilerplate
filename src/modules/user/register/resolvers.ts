@@ -1,10 +1,10 @@
 import * as yup from 'yup';
 
-import { IResolverMap } from '../../types/graphql-utils';
-import { User } from '../../entity/User';
-import { formatYupError } from '../../utils/formatYupError';
-import { createConfirmEmailLink } from '../../utils/createConfirmEmailLink';
-import { sendConfirmEmail } from '../../utils/sendConfirmEmail';
+import { createConfirmEmailLink } from './createConfirmEmailLink';
+import { sendConfirmEmail } from './sendConfirmEmail';
+import { IResolverMap } from '../../../types/graphql-utils';
+import { formatYupError } from '../../../utils/formatYupError';
+import { User } from '../../../entity/User';
 
 const schema = yup.object().shape({
   email: yup

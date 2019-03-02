@@ -1,12 +1,12 @@
 import * as yup from 'yup';
 import * as bcrypt from 'bcryptjs';
 
-import { User } from '../../entity/User';
-import { IResolverMap } from '../../types/graphql-utils';
-import { FRONTEND_HOST, FORGOT_PASSWORD_PREFIX } from '../../utils/constants';
-import { createForgotPasswordLink } from '../../utils/createForgotPasswordLink';
-import { sendForgotPasswordEmail } from '../../utils/sendForgotPasswordEmail';
-import { formatYupError } from '../../utils/formatYupError';
+import { createForgotPasswordLink } from './createForgotPasswordLink';
+import { sendForgotPasswordEmail } from './sendForgotPasswordEmail';
+import { IResolverMap } from '../../../types/graphql-utils';
+import { User } from '../../../entity/User';
+import { FRONTEND_HOST, FORGOT_PASSWORD_PREFIX } from '../../../utils/constants';
+import { formatYupError } from '../../../utils/formatYupError';
 
 const schema = yup.object().shape({
   password: yup

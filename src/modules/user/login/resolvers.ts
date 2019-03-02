@@ -1,8 +1,8 @@
 import * as bcrypt from 'bcryptjs';
+import { IResolverMap } from '../../../types/graphql-utils';
+import { User } from '../../../entity/User';
+import { USER_SESSION_ID_PREFIX } from '../../../utils/constants';
 
-import { IResolverMap } from '../../types/graphql-utils';
-import { User } from '../../entity/User';
-import { USER_SESSION_ID_PREFIX } from '../../utils/constants';
 
 export const resolvers: IResolverMap = {
   Mutation: {

@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add -D @types/express-rate-limit @types/rate-limit-redis
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add -D @types/merge-graphql-schemas
 
 PATH: 
   C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\ZVER3D\bin;C:\Program Files (x86)\Python37-32\Scripts;C:\Program Files (x86)\Python37-32;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Common Files\Intel\Shared Files\cpp\bin\Intel64;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\FPC\2.6.4\bin\i386-Win32;C:\Program Files\OpenVPN\bin;C:\Program Files\Common Files\Autodesk Shared;C:\Program Files (x86)\Autodesk\Backburner;C:\Program Files (x86)\Livestreamer;C:\HashiCorp\Vagrant\bin;C:\OSPanel\modules\php\PHP-7.2-x64;C:\ProgramData\ComposerSetup\bin;C:\WINDOWS\System32\OpenSSH;C:\Program Files\nodejs;C:\Program Files\Git\cmd;C:\Program Files (x86)\Yarn\bin;C:\Program Files\Redis;C:\Users\ZVER3D\.windows-build-tools\python27;C:\Users\ZVER3D\AppData\Roaming\npm\node_modules\npm\node_modules\npm-lifecycle\node-gyp-bin;C:\Users\ZVER3D\AppData\Roaming\npm\node_modules\windows-build-tools\node_modules\.bin;C:\Users\ZVER3D\AppData\Roaming\npm\node_modules\.bin;C:\Users\ZVER3D\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\ZVER3D\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Common Files\Intel\Shared Files\cpp\bin\Intel64;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\FPC\2.6.4\bin\i386-Win32;C:\Program Files\OpenVPN\bin;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit;C:\Program Files\Common Files\Autodesk Shared;C:\Program Files (x86)\Autodesk\Backburner;C:\Program Files (x86)\Livestreamer;C:\HashiCorp\Vagrant\bin;C:\OSPanel\modules\php\PHP-7.2-x64;C:\ProgramData\ComposerSetup\bin;C:\WINDOWS\System32\OpenSSH;C:\Program Files\Git\cmd;C:\Program Files\nodejs;C:\Users\ZVER3D\AppData\Local\Microsoft\WindowsApps;C:\Users\ZVER3D\AppData\Local\GitHubDesktop\bin;C:\Program Files\heroku\bin;C:\Program Files\Oracle\VirtualBox;C:\Users\ZVER3D\AppData\Roaming\Composer\vendor\bin;C:\Users\ZVER3D\AppData\Local\Programs\Microsoft VS Code Insiders\bin;C:\Users\ZVER3D\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\ZVER3D\AppData\Local\Microsoft\WindowsApps;C:\Users\ZVER3D\AppData\Roaming\npm;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl;C:\Users\ZVER3D\AppData\Local\Yarn\bin
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2frate-limit-redis: Not found
+  Error: https://registry.yarnpkg.com/@types%2fmerge-graphql-schemas: Not found
       at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:65364:18)
       at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:129397:22)
       at Request.emit (events.js:182:13)
@@ -37,7 +37,10 @@ npm manifest:
       "@types/connect-redis": "^0.0.8",
       "@types/dotenv": "^6.1.0",
       "@types/express": "^4.16.1",
+      "@types/express-rate-limit": "^3.3.0",
       "@types/express-session": "^1.15.12",
+      "@types/faker": "^4.1.5",
+      "@types/glob": "^7.1.1",
       "@types/ioredis": "^4.0.8",
       "@types/jest": "^24.0.9",
       "@types/node": "^11.9.5",
@@ -65,11 +68,14 @@ npm manifest:
       "express": "^4.16.4",
       "express-rate-limit": "^3.4.0",
       "express-session": "^1.15.6",
+      "faker": "^4.1.0",
+      "glob": "^7.1.3",
       "graphql": "^14.1.1",
       "graphql-import": "^0.7.1",
       "graphql-tools": "^4.0.4",
       "graphql-yoga": "^1.17.4",
       "ioredis": "^4.6.2",
+      "merge-graphql-schemas": "^1.5.8",
       "node-fetch": "^2.3.0",
       "pg": "^7.3.0",
       "rate-limit-redis": "^1.6.0",
@@ -85,10 +91,11 @@ npm manifest:
       "start": "cross-env NODE_ENV=development nodemon --exec ts-node --files src/index.ts",
       "gen:types": "yarn ts-node --files src/scripts/createTypes.ts",
       "test": "cross-env NODE_ENV=test yarn jest --detectOpenHandles --forceExit --runInBand",
+      "test-parallel": "cross-env NODE_ENV=test yarn jest --detectOpenHandles",
       "test-watch": "cross-env NODE_ENV=test yarn jest --detectOpenHandles --watch --runInBand"
     },
     "jest": {
-      "globalSetup": "./src/testsSetup/setup.ts",
+      "globalSetup": "./src/testUtils/setup.ts",
       "transform": {
         "^.+\\.tsx?$": "ts-jest"
       },
@@ -323,6 +330,18 @@ Lockfile:
     dependencies:
       "@types/node" "*"
   
+  "@types/events@*":
+    version "3.0.0"
+    resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
+    integrity sha512-EaObqwIvayI5a8dCzhFrjKzVwKLxjoG9T6Ppd5CEo07LRKfQ8Yokw54r5+Wq7FaBQ+yXRvQAYPrHwya1/UFt9g==
+  
+  "@types/express-rate-limit@^3.3.0":
+    version "3.3.0"
+    resolved "https://registry.yarnpkg.com/@types/express-rate-limit/-/express-rate-limit-3.3.0.tgz#fb87590b37f19629adcec8774c7a75049a4d1c36"
+    integrity sha512-/PmN34aFHxcYwu/BALxFPnLAtUxRjhWFX7baIzaWJ85Mt2l/akj9apACvyQW+qnkxzZanWSy23POX42vHHCsNg==
+    dependencies:
+      "@types/express" "*"
+  
   "@types/express-serve-static-core@*":
     version "4.16.1"
     resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.16.1.tgz#35df7b302299a4ab138a643617bd44078e74d44e"
@@ -348,11 +367,25 @@ Lockfile:
       "@types/express-serve-static-core" "*"
       "@types/serve-static" "*"
   
+  "@types/faker@^4.1.5":
+    version "4.1.5"
+    resolved "https://registry.yarnpkg.com/@types/faker/-/faker-4.1.5.tgz#8f620f9c9a67150aa0a32b4e8a407da43fca61d4"
+    integrity sha512-YSDqoBEWYGdNk53xSkkb6REaUaVSlIjxIAGjj/nbLzlZOit7kUU+nA2zC2qQkIVO4MQ+3zl4Sz7aw+kbpHHHUQ==
+  
   "@types/form-data@*":
     version "2.2.1"
     resolved "https://registry.yarnpkg.com/@types/form-data/-/form-data-2.2.1.tgz#ee2b3b8eaa11c0938289953606b745b738c54b1e"
     integrity sha512-JAMFhOaHIciYVh8fb5/83nmuO/AHwmto+Hq7a9y8FzLDcC1KCU344XDOMEmahnrTFlHjgh4L0WJFczNIX2GxnQ==
     dependencies:
+      "@types/node" "*"
+  
+  "@types/glob@^7.1.1":
+    version "7.1.1"
+    resolved "https://registry.yarnpkg.com/@types/glob/-/glob-7.1.1.tgz#aa59a1c6e3fbc421e07ccd31a944c30eba521575"
+    integrity sha512-1Bh06cbWJUHMC97acuD6UMG29nMt0Aqz1vF3guLfG+kHHJhy3AyohZFFxYk2f7Q1SQIrNwvncxAE0N/9s70F2w==
+    dependencies:
+      "@types/events" "*"
+      "@types/minimatch" "*"
       "@types/node" "*"
   
   "@types/graphql-deduplicator@^2.0.0":
@@ -388,6 +421,11 @@ Lockfile:
     version "2.0.1"
     resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.1.tgz#dc488842312a7f075149312905b5e3c0b054c79d"
     integrity sha512-FwI9gX75FgVBJ7ywgnq/P7tw+/o1GUbtP0KzbtusLigAOgIgNISRK0ZPl4qertvXSIE8YbsVJueQ90cDt9YYyw==
+  
+  "@types/minimatch@*":
+    version "3.0.3"
+    resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
+    integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
   
   "@types/node-fetch@^2.1.6":
     version "2.1.6"
@@ -1604,6 +1642,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
     integrity sha1-s2nW+128E+7PUk+RsHD+7cNXzzQ=
   
+  deepmerge@^2.2.1:
+    version "2.2.1"
+    resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-2.2.1.tgz#5d3ff22a01c00f645405a2fbc17d0778a1801170"
+    integrity sha512-R9hc1Xa/NOBi9WRVUWg19rl1UB7Tt4kuPd+thNJgFZoxXsTz7ncaPaeIm+40oSGuP33DfMb4sZt1QIGiJzC4EA==
+  
   default-require-extensions@^2.0.0:
     version "2.0.0"
     resolved "https://registry.yarnpkg.com/default-require-extensions/-/default-require-extensions-2.0.0.tgz#f5f8fbb18a7d6d50b21f641f649ebb522cfe24f7"
@@ -2089,6 +2132,11 @@ Lockfile:
     version "1.4.0"
     resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
     integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
+  
+  faker@^4.1.0:
+    version "4.1.0"
+    resolved "https://registry.yarnpkg.com/faker/-/faker-4.1.0.tgz#1e45bbbecc6774b3c195fad2835109c6d748cc3f"
+    integrity sha1-HkW7vsxndLPBlfrSg1EJxtdIzD8=
   
   fast-deep-equal@^2.0.1:
     version "2.0.1"
@@ -3919,6 +3967,15 @@ Lockfile:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/merge-descriptors/-/merge-descriptors-1.0.1.tgz#b00aaa556dd8b44568150ec9d1b953f3f90cbb61"
     integrity sha1-sAqqVW3YtEVoFQ7J0blT8/kMu2E=
+  
+  merge-graphql-schemas@^1.5.8:
+    version "1.5.8"
+    resolved "https://registry.yarnpkg.com/merge-graphql-schemas/-/merge-graphql-schemas-1.5.8.tgz#89457b60312aabead44d5b2b7625643f8ab9e369"
+    integrity sha512-0TGOKebltvmWR9h9dPYS2vAqMPThXwJ6gVz7O5MtpBp2sunAg/M25iMSNI7YhU6PDJVtGtldTfqV9a+55YhB+A==
+    dependencies:
+      deepmerge "^2.2.1"
+      glob "^7.1.3"
+      is-glob "^4.0.0"
   
   merge-stream@^1.0.1:
     version "1.0.1"

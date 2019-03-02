@@ -1,22 +1,23 @@
 import { Connection } from 'typeorm';
+import * as faker from 'faker';
 
-import { createTypeOrmConnection } from '../../utils/createConnection';
-import { User } from '../../entity/User';
-import { TestClient } from '../../utils/TestClient';
-import { createForgotPasswordLink } from '../../utils/createForgotPasswordLink';
-import { redis } from '../../redis';
-import { FRONTEND_HOST } from '../../utils/constants';
+import { createForgotPasswordLink } from './createForgotPasswordLink';
+import { createTestConnection } from '../../../testUtils/createTestConnection';
+import { User } from '../../../entity/User';
+import { TestClient } from '../../../testUtils/TestClient';
+import { FRONTEND_HOST } from '../../../utils/constants';
+import { redis } from '../../../redis';
 
 const { TEST_HOST } = process.env;
 
-const email = 'test@test.com';
-const password = '123testPass';
-const newPassword = 'new123Password';
+const email = faker.internet.email();
+const password = faker.internet.password();
+const newPassword = faker.internet.password();
 
 let connection: Connection;
 let userId: number;
 beforeAll(async () => {
-  connection = await createTypeOrmConnection();
+  connection = await createTestConnection();
   const user1 = await User.create({ email, password, confirmed: true }).save();
   userId = user1.id;
 });

@@ -1,18 +1,22 @@
 import fetch from 'node-fetch';
 import { Connection } from 'typeorm';
+import * as faker from 'faker';
 
 import { User } from "../entity/User";
 import { createTypeOrmConnection } from "../utils/createConnection";
-import { createConfirmEmailLink } from "../utils/createConfirmEmailLink";
 import { redis } from "../redis";
+import { createConfirmEmailLink } from '../modules/user/register/createConfirmEmailLink';
 
 let ID = 1;
 let url = '';
 
+const email = faker.internet.email();
+const password = faker.internet.password();
+
 let connection: Connection;
 beforeAll(async () => {
   connection = await createTypeOrmConnection();
-  const user = await User.create({ email: 'goodmail@mail.com', password: '123asffas' }).save();
+  const user = await User.create({ email, password }).save();
   url = await createConfirmEmailLink(process.env.TEST_HOST!, user.id, redis);
   ID = user.id;
   await fetch(url);
