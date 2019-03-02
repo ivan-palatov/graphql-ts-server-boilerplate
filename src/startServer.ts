@@ -4,6 +4,8 @@ import 'dotenv/config';
 import { GraphQLServer } from 'graphql-yoga';
 import * as session from 'express-session';
 import * as connectRedis from 'connect-redis';
+import * as RateLimit from 'express-rate-limit';
+import * as RedisStoreRateLimit from 'rate-limit-redis';
 
 import { redis } from './redis';
 import { confirmEmail } from './routes/confirmEmail';
@@ -28,6 +30,15 @@ export const startServer = async () => {
   const RedisStore = connectRedis(session);
 
   // Apply middleware
+  const limiter = new RateLimit({
+    store: new RedisStoreRateLimit({
+      client: redis,
+    }),
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 150, // limit each IP to 100 requests per windowMs
+  });
+  server.express.use(limiter);
+
   server.express.use(
     session({
       store: new RedisStore({
