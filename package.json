@@ -20,7 +20,7 @@
     "@types/sparkpost": "^2.1.4",
     "@types/uuid": "^3.4.4",
     "@types/yup": "^0.26.10",
-    "concurrently": "^4.1.0",
+    "concurrently": "^5.0.0",
     "cross-env": "^5.2.0",
     "gql2ts": "^1.10.1",
     "jest": "^24.1.0",
