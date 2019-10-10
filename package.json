@@ -13,7 +13,7 @@
     "@types/faker": "^4.1.6",
     "@types/glob": "^7.1.1",
     "@types/ioredis": "^4.0.18",
-    "@types/jest": "^24.0.9",
+    "@types/jest": "^24.0.18",
     "@types/node": "^11.9.5",
     "@types/node-fetch": "^2.5.2",
     "@types/request-promise": "^4.1.42",
