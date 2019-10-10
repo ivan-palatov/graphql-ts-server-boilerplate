@@ -19,7 +19,7 @@
     "@types/request-promise": "^4.1.42",
     "@types/sparkpost": "^2.1.4",
     "@types/uuid": "^3.4.4",
-    "@types/yup": "^0.26.10",
+    "@types/yup": "^0.26.24",
     "concurrently": "^5.0.0",
     "cross-env": "^6.0.3",
     "gql2ts": "^1.10.1",

@@ -634,10 +634,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@types/yup@^0.26.10":
-  version "0.26.11"
-  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.11.tgz#e0ca839aab79f1d8f4a9861162e7034fc350d700"
-  integrity sha512-l4jY6ytoTDm2gZCfSgP5TsirNSUGLMf+fuWSz3HvDiBwh7EQWdoi4LF2PeAPTYf5GV8MAwZYbPEvc2mcciMGCg==
+"@types/yup@^0.26.24":
+  version "0.26.24"
+  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.24.tgz#c24170b3a5c867b4fabd49fcc42fe45f780cb153"
+  integrity sha512-x0bhHnYjH5mZit4HivUYbTMO4LouOTGwp/LLxSL1mbJYVwNJtHYESH0ed2bwM1lkI2yDmsoCDYJnWEgHeJDACg==
 
 "@types/zen-observable@^0.5.3":
   version "0.5.4"
