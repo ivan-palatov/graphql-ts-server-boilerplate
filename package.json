@@ -53,7 +53,7 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "sparkpost": "^2.1.4",
-    "typeorm": "0.2.14",
+    "typeorm": "0.2.19",
     "uuid": "^3.3.2",
     "yup": "^0.26.10"
   },
